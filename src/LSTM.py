@@ -50,12 +50,12 @@ class RNN(nn.Module):
         print("Print what the hell labels is:", labels)
         #mask out 'PAD' tokens
         mask = (labels >= 0).float()
-
+        print("What the hell is mask?", mask)
         #the number of tokens is the sum of elements in mask
         bla = torch.sum(mask)
-        print(bla)
+        print("Wtf is torch.sum(mask)?", bla)
         num_tokens = int(bla)
-        print(num_tokens)
+        print("Wtf is int(torch.sum)?", num_tokens)
         #num_tokens = int(torch.sum(mask))
 
         #pick the values corresponding to labels and multiply by mask
