@@ -1,6 +1,6 @@
-import torch 
+import torch
 from torch import nn
-import torch.nn.functional as F
+import torch.nn.functional as F #
 
 class RNN(nn.Module):
     def __init__(self, 
@@ -14,8 +14,8 @@ class RNN(nn.Module):
         self.embedding_size = embedding_layer.weight.shape[1]
 
         # the LSTM takes an embedded sentence
-        self.lstm = nn.LSTM(self.embedding_size, 
-                            hidden_dim_size, 
+        self.lstm = nn.LSTM(self.embedding_size,
+                            hidden_dim_size,
                             batch_first=True)
 
         # fc (fully connected) layer transforms the LSTM-output to give the final output layer
@@ -41,22 +41,25 @@ class RNN(nn.Module):
     @staticmethod
     def loss_fn(outputs, labels):
         """
-        Custom loss function. 
-        In the section on preparing batches, we ensured that the labels for the PAD tokens were set to -1. 
+        Custom loss function.
+        In the section on preparing batches, we ensured that the labels for the PAD tokens were set to -1.
         We can leverage this to filter out the PAD tokens when we compute the loss.
         """
         #reshape labels to give a flat vector of length batch_size*seq_len
-        labels = labels.view(-1)  
-
+        labels = labels.view(-1)
+        print("Print what the hell labels is:", labels)
         #mask out 'PAD' tokens
         mask = (labels >= 0).float()
 
         #the number of tokens is the sum of elements in mask
-        num_tokens = int(torch.sum(mask))
+        bla = torch.sum(mask)
+        print(bla)
+        num_tokens = int(bla)
+        print(num_tokens)
+        #num_tokens = int(torch.sum(mask))
 
         #pick the values corresponding to labels and multiply by mask
         outputs = outputs[range(outputs.shape[0]), labels]*mask
 
         #cross entropy loss for all non 'PAD' tokens
         return -torch.sum(outputs)/num_tokens
-
