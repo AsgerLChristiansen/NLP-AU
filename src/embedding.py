@@ -58,4 +58,4 @@ def gensim_to_torch_embedding(gensim_wv): # Input is a pre-trained gensim model.
     vocab["PAD"] = emb_layer.padding_idx # So PAD gets an index in the vocabulary of -1, *because its the last vector!*
     # This step seems a bit superfluous!
 
-    return emb_layer, vocab
+    return emb_layer, vocab # Output is tensor + vocab * vectorspacecoordinates matrix.

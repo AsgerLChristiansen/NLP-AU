@@ -4,27 +4,29 @@ import torch.nn.functional as F #
 
 class RNN(nn.Module):
     def __init__(self, 
-                output_dim: int, 
-                embedding_layer: nn.Embedding, 
-                hidden_dim_size: int):
-        super().__init__()
+                output_dim: int,  # Takes an output dimension
+                embedding_layer: nn.Embedding,  # Takes a pre-trained nn.Embedding model.
+                hidden_dim_size: int): # Takes a hidden dimension size.
+        super().__init__() # Initializes more stuff.
 
         # maps each token to an embedding_dim vector using our word embeddings
         self.embedding = embedding_layer
         self.embedding_size = embedding_layer.weight.shape[1]
 
         # the LSTM takes an embedded sentence
-        self.lstm = nn.LSTM(self.embedding_size,
-                            hidden_dim_size,
-                            batch_first=True)
+        self.lstm = nn.LSTM(self.embedding_size, # nn.LSTM needs an input size
+                            hidden_dim_size, # And a hidden dim size
+                            batch_first=True) # And a "batch first" argument
 
         # fc (fully connected) layer transforms the LSTM-output to give the final output layer
-        self.fc = nn.Linear(hidden_dim_size, 
-                            output_dim)
+        self.fc = nn.Linear(hidden_dim_size,  # Standard hidden layer. Needs input size
+                            output_dim) # and output size.
 
     def forward(self, X):
         # apply the embedding layer that maps each token to its embedding
         x = self.embedding(X)  # dim: batch_size x batch_max_len x embedding_dim
+        # I.e.: Each word per sequence (batch_max_len), in each batch (batch_size), has a 50-dimensional vector (Embedding dim)
+        # It's easier, perhaps, to see it as a sequence*embedding matrix, in 32 layers.
 
         # run the LSTM along the sentences of length batch_max_len
         x, _ = self.lstm(x)  # dim: batch_size x batch_max_len x lstm_hidden_dim
